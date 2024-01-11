@@ -2,6 +2,7 @@ package com.example.musicappui.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,9 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.musicappui.MainViewModel
 import com.example.musicappui.Screen
 import com.example.musicappui.screensInDrawer
 import kotlinx.coroutines.CoroutineScope
@@ -42,15 +48,18 @@ fun MainView(){
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val scope: CoroutineScope = rememberCoroutineScope()
-
+    val viewModel: MainViewModel = viewModel()
     //Allow us to find out on which "View" we current are
     val controller: NavController = rememberNavController()
     val navBackStackEntry by controller.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    val currentScreen = remember{
+        viewModel.currentScreen.value
+    }
+
     val title = remember{
-        //TODO change that to currentScreen.title
-        mutableStateOf("")
+        mutableStateOf(currentScreen.title)
     }
 
    Scaffold(
@@ -87,7 +96,7 @@ fun MainView(){
 
 
    ) {
-       Text("Text", modifier = Modifier.padding(it))
+       Navigation(navController = controller, viewModel = viewModel, pd = it)
    }
 
 }
@@ -117,4 +126,23 @@ fun DrawerItem(
             style = MaterialTheme.typography.h5,
         )
     }
+}
+
+@Composable
+fun Navigation(navController: NavController, viewModel: MainViewModel, pd:PaddingValues){
+
+    NavHost(navController = navController as NavHostController,
+        startDestination = Screen.DrawerScreen.AddAccount.route , modifier = Modifier.padding(pd) ){
+
+        composable(Screen.DrawerScreen.AddAccount.route){
+
+        }
+        composable(Screen.DrawerScreen.Subscription.route){
+            
+        }
+    }
+
+
+
+
 }
