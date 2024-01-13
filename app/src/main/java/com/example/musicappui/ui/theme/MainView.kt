@@ -110,7 +110,7 @@ fun MainView(){
                     val tint = if(isSelected)Color.White else Color.Black
                     BottomNavigationItem(selected = currentRoute == item.bRoute,
                         onClick = { controller.navigate(item.bRoute)
-                                    title.value = item.bRoute
+                                    title.value = item.bTitle
                                   },
                         icon = { Icon(tint= tint, contentDescription = item.bTitle, painter = painterResource(id = item.icon))
                         },
@@ -219,7 +219,7 @@ fun MoreBottomSheet(modifier: Modifier) {
     Box(
         Modifier
             .fillMaxWidth()
-            .height(300.dp)
+            .height(225.dp)
             .background(
                 MaterialTheme.colors.primarySurface
             )
